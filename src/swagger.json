@@ -1,0 +1,202 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Atlas",
+    "description": "Essa é uma documentação sobre a Atlas API.",
+    "version":"1.0.0",
+    "contact":{
+      "email":"email@email.com"
+    }
+  },
+  "paths":{
+    "/users":{
+      "post":{
+        "tags":["users"],
+        "summary": "Cria usuário.",
+        "description": "Cria um novo usuário.",
+        "requestBody": {
+          "content": {
+              "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "name": "rocketseat",
+                    "email": "email@rocketseat.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "201":{
+            "description": "Operação realizada com sucesso.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+          },
+          "400":{
+            "description": "E-mail of the user already registered"
+          }
+        }
+      },
+      "get":{
+        "tags":[
+          "users"
+        ],
+        "summary":"Retorna todos os usuários",
+        "description":"Somente usuário admin",
+        "parameters":[{
+        "name": "user_id",
+        "schema": {
+        "type": "string",
+        "format": "UUID"
+        },
+        "in": "header",
+        "required":true
+        }],
+        "responses":{
+          "200":{
+            "description": "Operação realizada com sucesso.",
+              "content": {
+                "application/json": {
+                "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"user is not Admin!"
+          }
+        }
+      }
+    },
+    "/users{user_id}":{
+      "get":{
+        "tags":["users"],
+        "summary":"Retorna um usuário específico",
+        "parameters":[{
+          "name":"user_id",
+          "schema": {
+            "type": "string",
+            "format": "UUID"
+            },
+          "in": "header",
+          "required":true
+        }],
+        "responses":{
+          "200":{
+            "description": "Operação realizada com sucesso.",
+            "content": {
+              "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/UserAdmin"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"user is not Admin!"
+          }
+        }
+      }
+    },
+    "/users{user_id}/admin":{
+      "get":{
+        "tags":["users"],
+        "summary":"Torna um usuário admin",
+        "parameters":[{
+          "name":"user_id",
+          "schema": {
+            "type": "string",
+            "format": "UUID"
+            },
+          "in": "header",
+          "required":true
+        }],
+        "responses":{
+          "200":{
+            "description": "Operação realizada com sucesso.",
+            "content": {
+              "application/json": {
+              "schema": {
+                "type": "object",
+                "$ref": "#/components/schemas/UserAdmin"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"user not existis!"
+          }
+        }
+      }
+    }
+
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "admin": {
+            "type": "boolean",
+            "default": false
+          },
+          "created-at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      },
+      "UserAdmin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "admin": {
+            "type": "boolean",
+            "default": true
+          },
+          "created-at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
